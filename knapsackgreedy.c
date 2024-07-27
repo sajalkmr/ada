@@ -1,68 +1,40 @@
 #include <stdio.h>
+
 #define MAX 50
 
-int p[MAX], w[MAX], x[MAX];
-double maxprofit;
-int n, m, i;
+int main() {
+    float weight[MAX], profit[MAX], ratio[MAX];
+    float TotalValue = 0.0, capacity;
+    int n, i, j;
 
-void greedyKnapsack(int n, int w[], int p[], int m) {
-    double ratio[MAX];
-    
+    printf("Enter the number of items: ");
+    scanf("%d", &n);
+
     for (i = 0; i < n; i++) {
-        ratio[i] = (double)p[i] / w[i];
+        printf("Enter Weight and Profit for item[%d]: ", i);
+        scanf("%f %f", &weight[i], &profit[i]);
     }
-    
+
+    printf("Enter the capacity of the knapsack: ");
+    scanf("%f", &capacity);
+
+    for (i = 0; i < n; i++) ratio[i] = profit[i] / weight[i];
     for (i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n; j++) {
+        for (j = i + 1; j < n; j++) {
             if (ratio[i] < ratio[j]) {
-                double temp = ratio[i];
-                ratio[i] = ratio[j];
-                ratio[j] = temp;
-                
-                int temp2 = w[i];
-                w[i] = w[j];
-                w[j] = temp2;
-                
-                temp2 = p[i];
-                p[i] = p[j];
-                p[j] = temp2;
+                float temp = ratio[i]; ratio[i] = ratio[j]; ratio[j] = temp;
+                temp = weight[i]; weight[i] = weight[j]; weight[j] = temp;
+                temp = profit[i]; profit[i] = profit[j]; profit[j] = temp;
             }
         }
     }
-    
-    int currentWeight = 0;
-    maxprofit = 0.0;
-    
-    for (i = 0; i < n; i++) {
-        if (currentWeight + w[i] <= m) {
-            x[i] = 1;
-            currentWeight += w[i];
-            maxprofit += p[i];
-        } else {
-            x[i] = (m - currentWeight) / (double)w[i];
-            maxprofit += x[i] * p[i];
-            break;
-        }
-    }
-    
-    printf("%.1f\n", maxprofit);
-    for (i = 0; i < n; i++) {
-        printf("%d\t", x[i]);
-    }
-    printf("\n");
-}
 
-int main() {
-    scanf("%d", &n);
-    for (i = 0; i < n; i++) {
-        scanf("%d", &w[i]);
+    for (i = 0; i < n && weight[i] <= capacity; i++) {
+        TotalValue += profit[i];
+        capacity -= weight[i];
     }
-    for (i = 0; i < n; i++) {
-        scanf("%d", &p[i]);
-    }
-    scanf("%d", &m);
-    
-    greedyKnapsack(n, w, p, m);
-    
+    if (i < n) TotalValue += ratio[i] * capacity;
+
+    printf("The maximum value is: %.2f\n", TotalValue);
     return 0;
 }
