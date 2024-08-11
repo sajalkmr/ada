@@ -33,10 +33,15 @@ void topology() {
         }
     }
 
-    printf("The topological sequence is:\n");
-    for (i = 0; i < n; i++)
-        printf("%d ", t[i] + 1);
-    printf("\n");
+    if (k != n) {
+        printf("The graph has a cycle, and thus no topological ordering exists.\n");
+    } else {
+        printf("The topological sequence is:\n");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", t[i] + 1);
+        }
+        printf("\n");
+    }
 }
 
 int main() {
