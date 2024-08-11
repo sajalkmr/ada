@@ -1,39 +1,43 @@
 #include <stdio.h>
-#define MAX 10
 
-int s[MAX], x[MAX], d;
+#define MAX_SIZE 100
 
-void sumofsub(int p, int k, int r) {
-    int i;
-    x[k] = 1;
-    if ((p + s[k]) == d) {
-        for (i = 1; i <= k; i++)
-            if (x[i] == 1)
-                printf("%d ", s[i]);
+void findSubsets(int set[], int n, int index, int currentSum, int targetSum, int subset[], int subsetSize) {
+    if (currentSum == targetSum) {
+        for (int i = 0; i < subsetSize; i++) {
+            printf("%d ", subset[i]);
+        }
         printf("\n");
-    } else if (p + s[k] + s[k + 1] <= d) {
-        sumofsub(p + s[k], k + 1, r - s[k]);
+        return;
     }
-    if ((p + r - s[k] >= d) && (p + s[k + 1] <= d)) {
-        x[k] = 0;
-        sumofsub(p, k + 1, r - s[k]);
-    }
+
+    if (index >= n || currentSum > targetSum) return;
+
+    subset[subsetSize] = set[index];
+    findSubsets(set, n, index + 1, currentSum + set[index], targetSum, subset, subsetSize + 1);
+
+    findSubsets(set, n, index + 1, currentSum, targetSum, subset, subsetSize);
 }
 
 int main() {
-    int i, n, sum = 0;
-    printf("\nEnter the n value: ");
+    int n, d;
+
+    printf("Enter the n value: ");
     scanf("%d", &n);
-    printf("\nEnter the set in increasing order: ");
-    for (i = 1; i <= n; i++)
-        scanf("%d", &s[i]);
-    printf("\nEnter the max subset value: ");
+
+    int set[MAX_SIZE];
+    int subset[MAX_SIZE];
+
+    printf("Enter the set in increasing order:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+    }
+
+    printf("Enter the max subset value: ");
     scanf("%d", &d);
-    for (i = 1; i <= n; i++)
-        sum += s[i];
-    if (sum < d || s[1] > d)
-        printf("\nNo subset possible\n");
-    else
-        sumofsub(0, 1, sum);
+
+    printf("Subsets with the sum %d are:\n", d);
+    findSubsets(set, n, 0, 0, d, subset, 0);
+
     return 0;
 }
