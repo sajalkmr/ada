@@ -18,13 +18,23 @@ int main() {
     printf("Enter the capacity of the knapsack: ");
     scanf("%f", &capacity);
 
-    for (i = 0; i < n; i++) ratio[i] = profit[i] / weight[i];
+    for (i = 0; i < n; i++) 
+        ratio[i] = profit[i] / weight[i];
+
     for (i = 0; i < n - 1; i++) {
         for (j = i + 1; j < n; j++) {
             if (ratio[i] < ratio[j]) {
-                float temp = ratio[i]; ratio[i] = ratio[j]; ratio[j] = temp;
-                temp = weight[i]; weight[i] = weight[j]; weight[j] = temp;
-                temp = profit[i]; profit[i] = profit[j]; profit[j] = temp;
+                float temp = ratio[i]; 
+                ratio[i] = ratio[j]; 
+                ratio[j] = temp;
+
+                temp = weight[i]; 
+                weight[i] = weight[j]; 
+                weight[j] = temp;
+
+                temp = profit[i]; 
+                profit[i] = profit[j]; 
+                profit[j] = temp;
             }
         }
     }
@@ -33,8 +43,11 @@ int main() {
         TotalValue += profit[i];
         capacity -= weight[i];
     }
-    if (i < n) TotalValue += ratio[i] * capacity;
+
+    if (i < n) 
+        TotalValue += ratio[i] * capacity;
 
     printf("The maximum value is: %.2f\n", TotalValue);
+
     return 0;
 }
